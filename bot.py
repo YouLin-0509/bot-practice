@@ -93,49 +93,53 @@ class TicketBot:
         page.wait_for_load_state() # 等待新頁面載入
 
     def set_tickets_and_checkout(self, page):
-        # 步驟 4: 設定票數
-        logger.info(f"正在設定票數為: {self.ticket_count}")
+        # 步驟 4, 5, 6: 設定票數、處理驗證碼、同意條款並提交 (整合至重試迴圈)
+        while True:
+            try:
+                # 步驟 4: 設定票數 (每次迴圈都重新設定)
+                logger.info(f"正在設定票數為: {self.ticket_count}")
+                ticket_selector = page.locator("select.form-select")
+                # 等待下拉選單出現
+                ticket_selector.wait_for(state="visible", timeout=5000)
+                # 直接選擇指定的票數
+                ticket_selector.select_option(str(self.ticket_count))
+                logger.info(f"成功將票數設定為: {self.ticket_count}")
+
+                # 步驟 5: 處理驗證碼 (手動輸入)
+                logger.info("等待使用者手動輸入驗證碼...")
+                captcha_input = page.locator("#TicketForm_verifyCode")
+                
+                captcha_input.fill("")
+                captcha_code = input("請在瀏覽器中查看驗證碼，並在此手動輸入後按下 Enter: ")
+                captcha_input.fill(captcha_code)
+                logger.info("驗證碼已填寫。")
+
+                # 步驟 6: 同意條款並提交
+                logger.info("正在勾選同意條款...")
+                page.locator("#TicketForm_agree").check()
+                logger.info("已勾選同意條款。")
+                
+                logger.info("準備點擊 '確認張數' 按鈕...")
+                submit_button = page.get_by_role("button", name="確認張數")
+                # 點擊後，Playwright 會自動等待頁面導航完成
+                submit_button.click()
+
+                # 新策略：檢查提交後是否還在同一頁面
+                page.wait_for_timeout(1000)
+
+                # 藉由檢查頁面上是否還存在「驗證碼輸入框」來判斷是否失敗
+                if page.locator("#TicketForm_verifyCode").is_visible():
+                    logger.warning("⚠️ 驗證碼錯誤或提交失敗，請重新輸入...")
+                    continue
+                else:
+                    logger.info("成功提交，已離開驗證碼頁面。")
+                    break
+
+            except Exception as e:
+                logger.error(f"處理驗證碼或提交時發生預期外的錯誤: {e}", exc_info=True)
+                return
         
-        # 新策略：使用下拉選單設定票數
-        # 根據使用者提供的 element，我們定位 class 為 'form-select' 的 <select> 標籤
-        ticket_selector = page.locator("select.form-select")
-        
-        # 等待下拉選單出現
-        ticket_selector.wait_for(state="visible", timeout=5000)
-
-        # 直接選擇指定的票數，注意 select_option 的值需要是字串
-        ticket_selector.select_option(str(self.ticket_count))
-        
-        logger.info(f"成功從下拉選單將票數設定為: {self.ticket_count}")
-
-        # 步驟 5: 處理驗證碼 (手動輸入)
-        logger.info("等待使用者手動輸入驗證碼...")
-        try:
-            captcha_input = page.locator("#TicketForm_verifyCode")
-            captcha_input.wait_for(timeout=10000) # 等待輸入框出現
-            captcha_code = input("請在瀏覽器中查看驗證碼，並在此手動輸入後按下 Enter: ")
-            captcha_input.fill(captcha_code)
-            logger.info("驗證碼已填寫。")
-        except Exception as e:
-            logger.error("找不到或填寫驗證碼輸入框時發生錯誤", exc_info=True)
-
-        # 步驟 6: 同意條款並提交
-        try:
-            logger.info("正在勾選同意條款...")
-            page.locator("#TicketForm_agree").check()
-            logger.info("已勾選同意條款。")
-
-            logger.info("準備點擊 '確認張數' 按鈕...")
-            # 根據使用者提供的最新 element, 我們點擊 "確認張數" 按鈕
-            submit_button = page.get_by_role("button", name="確認張數")
-            submit_button.click()
-
-        except Exception as e:
-            logger.error(f"勾選同意或點擊 '確認張數' 時失敗: {e}")
-
         logger.info("腳本執行完畢，若成功，應已在結帳頁面。")
-        # logger.info(f"瀏覽器將在 {self.close_browser_delay} 秒後自動關閉。") # 已移除
-        # time.sleep(self.close_browser_delay / 1000) # 已移除
 
 def run(playwright: Playwright, bot: TicketBot) -> None:
     """主執行函式"""
