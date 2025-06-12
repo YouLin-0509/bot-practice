@@ -1,0 +1,24 @@
+2025-06-12 16:32:23,277 - TicketBotLogger - INFO - --- 機器人啟動 (遠端連線模式) ---
+2025-06-12 16:32:23,278 - TicketBotLogger - INFO - --- 請先手動開啟帶有 --remote-debugging-port=9222 參數的 Chrome ---
+2025-06-12 16:32:23,279 - TicketBotLogger - INFO - 目標網址: https://tixcraft.com/activity/game/25_dellatp
+2025-06-12 16:32:23,279 - TicketBotLogger - INFO - 目標日期: 2025/11/16
+2025-06-12 16:32:23,279 - TicketBotLogger - INFO - 座位願望清單: ['夜貓狂歡 特A區', '夜貓狂歡 特B區', '不眠派對 特C區', '紅2C區', '黃2B區']
+2025-06-12 16:32:23,279 - TicketBotLogger - INFO - 預計票數: 2
+2025-06-12 16:32:23,748 - TicketBotLogger - INFO - 成功連線到現有的 Chrome 瀏覽器！
+2025-06-12 16:32:23,758 - TicketBotLogger - INFO - 正在前往活動頁面: https://tixcraft.com/activity/game/25_dellatp
+2025-06-12 16:32:24,780 - TicketBotLogger - INFO - 正在尋找並點擊場次: 2025/11/16
+2025-06-12 16:32:24,780 - TicketBotLogger - INFO - 找到購票按鈕，正在點擊...
+2025-06-12 16:32:25,438 - TicketBotLogger - INFO - 成功點擊場次: 2025/11/16
+2025-06-12 16:32:25,438 - TicketBotLogger - INFO - 進入區域選擇頁面，將依據願望清單嘗試點擊...
+2025-06-12 16:32:25,439 - TicketBotLogger - INFO - 正在嘗試點擊志願: '夜貓狂歡 特A區'
+2025-06-12 16:32:26,170 - TicketBotLogger - INFO - 成功點擊 '夜貓狂歡 特A區'!
+2025-06-12 16:32:26,170 - TicketBotLogger - INFO - 成功進入下一步！
+2025-06-12 16:32:26,573 - TicketBotLogger - INFO - 正在設定票數為: 2
+2025-06-12 16:32:26,904 - TicketBotLogger - INFO - 成功從下拉選單將票數設定為: 2
+2025-06-12 16:32:26,905 - TicketBotLogger - INFO - 等待使用者手動輸入驗證碼...
+2025-06-12 16:32:30,280 - TicketBotLogger - INFO - 驗證碼已填寫。
+2025-06-12 16:32:30,281 - TicketBotLogger - INFO - 正在勾選同意條款...
+2025-06-12 16:32:30,333 - TicketBotLogger - INFO - 已勾選同意條款。
+2025-06-12 16:32:30,333 - TicketBotLogger - INFO - 準備點擊 '確認張數' 按鈕...
+2025-06-12 16:32:30,941 - TicketBotLogger - INFO - 腳本執行完畢，若成功，應已在結帳頁面。
+2025-06-12 16:32:30,941 - TicketBotLogger - INFO - 腳本執行完畢，若成功，應已在結帳頁面。
